@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, filter, lastValueFrom } from 'rxjs';
 import { Order, Plan, Ons } from '../model/info';
 import { planEnumType } from '../type/planType';
+import { DataService } from './data.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,7 @@ export class OrderService {
   };
 
   public orderSubject = new BehaviorSubject(this.order);
-  constructor() {}
+  constructor(private dataService: DataService) {}
 
   updateInfo(info: any, infoType: string) {
     let value = info.target.value;
@@ -38,14 +39,30 @@ export class OrderService {
     console.log('plan', plan);
   }
 
-  handleSelectType() {
-    this.order.selectedPlan =
-      this.order.selectedPlan === planEnumType.MONTH
-        ? planEnumType.YEAR
-        : planEnumType.MONTH;
-    this.orderSubject.next({ ...this.order });
+  async handleSelectType() {
+    try {
+      this.order.selectedPlan =
+        this.order.selectedPlan === planEnumType.MONTH
+          ? planEnumType.YEAR
+          : planEnumType.MONTH;
 
-    console.log('select type', this.order);
+      // 找到對應的價格
+      const getAllPlan = await lastValueFrom(this.dataService.getPlan());
+      const findPlan = getAllPlan.find(
+        (item: Plan) => item.id === this.order.plan.id,
+      );
+
+      this.order.plan = {
+        ...this.order.plan,
+        price:
+          this.order.selectedPlan === planEnumType.MONTH
+            ? findPlan?.monthPrice
+            : findPlan?.yearPrice,
+      };
+      this.orderSubject.next({ ...this.order });
+    } catch (error) {
+      console.log('error', error);
+    }
   }
 
   handleOnsSelect(ons: Ons) {
