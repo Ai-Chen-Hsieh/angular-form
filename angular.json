@@ -51,10 +51,13 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              "src/data/plan.json",
+              "src/data/ons.json",
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
+              "node_modules/@fortawesome/fontawesome-free/css/all.css",
               "src/styles.css"
             ],
             "scripts": []

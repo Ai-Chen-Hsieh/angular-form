@@ -1,1 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    @apply h-full font-sans;
+  }
+}
+
+@layer components {
+  .nav {
+    @apply flex h-full w-full justify-center rounded-tl-lg rounded-tr-lg bg-mobile-sidebar-bg  bg-cover bg-center bg-no-repeat lg:flex lg:items-center lg:rounded-lg lg:bg-desktop-sidebar-bg;
+  }
+
+  .step {
+    @apply my-8 aspect-[1/1] w-[50px] rounded-full border-2 border-solid
+    border-slate-100 text-center text-[1.25rem] font-extrabold leading-[50px] text-slate-200;
+  }
+  .step-active {
+    @apply bg-step-active text-step-active-text;
+  }
+}

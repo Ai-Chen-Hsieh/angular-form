@@ -1,0 +1,27 @@
+[
+    {
+        "id": 0,
+        "title": "Online service",
+        "description": "Access to multiplayer games",
+        "monthPrice": 1,
+        "yearPrice": 10,
+        "selected": false
+    },
+    {
+        "id": 1,
+        "title": "Larger storage",
+        "description": "Extra 1TB of cloud save",
+        "monthPrice": 2,
+        "yearPrice": 20,
+        "selected": false
+    },
+    {
+        "id": 2,
+        "title": "Customizable profile",
+        "description": "Custom theme on your profile",
+        "monthPrice": 2,
+        "yearPrice": 20,
+        "selected": false
+    }
+]
+    
