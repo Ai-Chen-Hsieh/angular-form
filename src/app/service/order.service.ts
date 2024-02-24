@@ -14,6 +14,7 @@ export class OrderService {
       email: '',
       phone: '',
     },
+
     plan: {
       id: 0,
       name: 'Arcade',
@@ -36,7 +37,6 @@ export class OrderService {
   handleSelectPlan(plan: Plan) {
     this.order.plan = { ...plan };
     this.orderSubject.next({ ...this.order });
-    console.log('plan', plan);
   }
 
   async handleSelectType() {
@@ -59,6 +59,16 @@ export class OrderService {
             ? findPlan?.monthPrice
             : findPlan?.yearPrice,
       };
+      this.order.ons = this.order.ons.map((item) => {
+        return {
+          ...item,
+          plan:
+            this.order.selectedPlan === planEnumType.MONTH
+              ? planEnumType.MONTH
+              : planEnumType.YEAR,
+        };
+      });
+      console.log('order', this.order);
       this.orderSubject.next({ ...this.order });
     } catch (error) {
       console.log('error', error);
@@ -66,6 +76,7 @@ export class OrderService {
   }
 
   handleOnsSelect(ons: Ons) {
+    console.log('nos', ons);
     const hadSelectIndex = this.order.ons.findIndex(
       (item) => item.id === ons.id,
     );
@@ -76,6 +87,4 @@ export class OrderService {
     }
     this.orderSubject.next({ ...this.order });
   }
-
-  handleFinalOrder() {}
 }

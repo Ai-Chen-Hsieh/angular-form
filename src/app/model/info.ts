@@ -15,6 +15,7 @@ export interface Ons {
   id: number;
   name: string;
   price: number;
+  plan: number;
 }
 
 export interface Order {

@@ -27,11 +27,4 @@ export class ShareService {
       this.currentStepSubject.next(this.currentStep);
     }
   }
-
-  // getData(): Observable<any> {
-  //   console.log('get data');
-  //   return this.http.get(
-  //     'https://www.thecocktaildb.com/api/json/v1/1/search.php?f=a',
-  //   );
-  // }
 }

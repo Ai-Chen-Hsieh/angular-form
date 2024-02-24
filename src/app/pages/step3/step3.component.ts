@@ -70,6 +70,7 @@ export class Step3Component implements OnInit, OnDestroy {
     const ons = {
       id: onsItem.id,
       name: onsItem.title,
+      plan: this.selectedPlan,
       price:
         this.selectedPlan == planEnumType.MONTH
           ? onsItem.monthPrice

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from '../../components/card/card.component';
 import { OrderService } from 'src/app/service/order.service';
+import { Ons, Plan } from 'src/app/model/info';
 
 @Component({
   selector: 'app-step4',
@@ -19,20 +20,22 @@ import { OrderService } from 'src/app/service/order.service';
               class=" flex border-b-[1px] border-solid border-secondary pb-4"
             >
               <div class=" mr-auto font-extrabold">
-                <p class=" font-extrabold text-primary">Arcade(Yearly)</p>
-                <p class=" text-secondary underline hover:cursor-pointer">
-                  Change
+                <p class=" font-extrabold text-primary">
+                  {{ selectedPlan.name }}
                 </p>
               </div>
-              <div class=" font-extrabold text-primary">$90/yr</div>
+              <div class=" font-extrabold text-primary">
+                $ {{ selectedPlan.price }}/ {{ selectType == 0 ? 'mo' : 'yr' }}
+              </div>
             </div>
-            <div class=" flex justify-between px-2 py-3 font-extrabold">
-              <span class=" text-secondary">online service</span>
-              <span class=" text-primary">+$10/yr</span>
-            </div>
-            <div class=" flex justify-between px-2 py-3 font-extrabold">
-              <span class="text-secondary">online service</span>
-              <span class=" text-primary">+$10/yr</span>
+            <div
+              class=" flex justify-between px-2 py-3 font-extrabold"
+              *ngFor="let item of ons"
+            >
+              <span class=" text-secondary">{{ item.name }}</span>
+              <span class=" text-primary"
+                >+$ {{ item.price }} / {{ item.plan == 0 ? 'mo' : 'yr' }}</span
+              >
             </div>
           </div>
         </div>
@@ -51,9 +54,16 @@ export class Step4Component implements OnInit {
     private shareService: ShareService,
     private orderService: OrderService,
   ) {}
+  ons: Ons[] = [];
+  selectedPlan: Plan = {
+    id: 0,
+    name: '',
+    price: 0,
+  };
+  selectType = this.orderService.order.selectedPlan;
 
   ngOnInit(): void {
-    console.log('order:', this.orderService.order);
-    // console.log(this.shareService.)
+    this.selectedPlan = this.orderService.order.plan;
+    this.ons = this.orderService.order.ons;
   }
 }
