@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, filter, lastValueFrom } from 'rxjs';
+import { BehaviorSubject, lastValueFrom, Observable } from 'rxjs';
 import { Order, Plan, Ons } from '../model/info';
 import { planEnumType } from '../type/planType';
 import { DataService } from './data.service';
@@ -8,7 +8,7 @@ import { DataService } from './data.service';
   providedIn: 'root',
 })
 export class OrderService {
-  order: Order = {
+  initialOrder: Order = {
     info: {
       name: '',
       email: '',
@@ -25,54 +25,75 @@ export class OrderService {
     totalPrice: 0,
   };
 
-  public orderSubject = new BehaviorSubject(this.order);
+  private orderSubject$ = new BehaviorSubject(this.initialOrder);
+  public order$: Observable<Order> = this.orderSubject$.asObservable();
   constructor(private dataService: DataService) {}
 
   updateInfo(info: any, infoType: string) {
     let value = info.target.value;
-    this.order.info = { ...this.order.info, [infoType]: value };
-    this.orderSubject.next(this.order);
+    this.orderSubject$.next({
+      ...this.orderSubject$.value,
+      info: { ...this.orderSubject$.value.info, [infoType]: value },
+    });
   }
 
   handleSelectPlan(plan: Plan) {
-    this.order.plan = { ...plan };
-    this.orderSubject.next({ ...this.order });
+    this.orderSubject$.next({
+      ...this.orderSubject$.value,
+      plan: plan,
+    });
   }
 
   async handleSelectType() {
     try {
-      this.order.selectedPlan =
-        this.order.selectedPlan === planEnumType.MONTH
-          ? planEnumType.YEAR
-          : planEnumType.MONTH;
-
+      const currentOrder = this.orderSubject$.value;
+      this.orderSubject$.next({
+        ...currentOrder,
+        selectedPlan:
+          currentOrder.selectedPlan === planEnumType.MONTH
+            ? planEnumType.YEAR
+            : planEnumType.MONTH,
+      });
       // 找到對應的價格
       const getAllPlan = await lastValueFrom(this.dataService.getPlan());
       const findPlan = getAllPlan.find(
-        (item: Plan) => item.id === this.order.plan.id,
+        (item: Plan) => item.id === currentOrder.plan.id,
       );
-      this.order.plan = {
-        ...this.order.plan,
-        price:
-          this.order.selectedPlan === planEnumType.MONTH
-            ? findPlan.monthPrice
-            : findPlan.yearPrice,
-      };
-      this.orderSubject.next({ ...this.order });
+
+      this.orderSubject$.next({
+        ...this.orderSubject$.value,
+        plan: {
+          ...this.orderSubject$.value.plan,
+          price:
+            this.orderSubject$.value.selectedPlan === planEnumType.MONTH
+              ? findPlan.monthPrice
+              : findPlan.yearPrice,
+        },
+      });
     } catch (error) {
       console.log('error', error);
     }
   }
 
   handleOnsSelect(ons: Ons) {
-    const hadSelectIndex = this.order.ons.findIndex(
+    const currentOrder = this.orderSubject$.getValue();
+    const hadSelectIndex = currentOrder.ons.findIndex(
       (item) => item.id === ons.id,
     );
-    if (hadSelectIndex >= 0) {
-      this.order.ons.splice(hadSelectIndex, 1);
-    } else {
-      this.order.ons.push(ons);
-    }
-    this.orderSubject.next({ ...this.order });
+
+    const updatedOns =
+      hadSelectIndex >= 0
+        ? [
+            ...currentOrder.ons.slice(0, hadSelectIndex),
+            ...currentOrder.ons.slice(hadSelectIndex + 1),
+          ]
+        : [...currentOrder.ons, ons];
+
+    const updatedOrder = {
+      ...currentOrder,
+      ons: updatedOns,
+    };
+
+    this.orderSubject$.next(updatedOrder);
   }
 }

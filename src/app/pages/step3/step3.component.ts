@@ -56,7 +56,7 @@ export class Step3Component implements OnInit, OnDestroy {
           this.onsItems = res;
         }),
         concatMap(() =>
-          this.orderService.orderSubject.pipe(takeUntil(this.destroy$)),
+          this.orderService.order$.pipe(takeUntil(this.destroy$)),
         ),
       )
       .subscribe((order) => {

@@ -1,9 +1,10 @@
+import { Observable, Subject, interval, takeUntil } from 'rxjs';
 import { ShareService } from './../../service/share.service.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from '../../components/card/card.component';
 import { OrderService } from 'src/app/service/order.service';
-import { Ons, Plan } from 'src/app/model/info';
+import { Ons, Order, Plan } from 'src/app/model/info';
 
 @Component({
   selector: 'app-step4',
@@ -54,7 +55,7 @@ import { Ons, Plan } from 'src/app/model/info';
   styles: [],
   imports: [CommonModule, CardComponent],
 })
-export class Step4Component implements OnInit {
+export class Step4Component implements OnInit, OnDestroy {
   constructor(
     private shareService: ShareService,
     private orderService: OrderService,
@@ -65,27 +66,37 @@ export class Step4Component implements OnInit {
     name: '',
     price: 0,
   };
-  selectType = this.orderService.order.selectedPlan;
+  selectType: number = 0;
+  order$ = this.orderService.order$;
   totalPrice = 0;
+  private destroy$: Subject<void> = new Subject();
 
   ngOnInit(): void {
-    this.selectedPlan = this.orderService.order.plan;
-    this.ons = this.orderService.order.ons;
+    this.order$.pipe(takeUntil(this.destroy$)).subscribe((res) => {
+      this.ons = [...res.ons];
+      this.selectType = res.selectedPlan;
+      this.selectedPlan = { ...res.plan };
+    });
     this.totalPrice = this.calculateTotal(this.totalPrice);
   }
 
   calculateTotal(initialValue: number) {
     let total = initialValue;
-    total += this.orderService.order.plan.price;
+    total += this.selectedPlan.price;
     if (this.selectType == 0) {
-      this.orderService.order.ons.forEach((item) => {
+      this.ons.forEach((item) => {
         total += item.monthPrice;
       });
     } else {
-      this.orderService.order.ons.forEach((item) => {
+      this.ons.forEach((item) => {
         total += item.yearPrice;
       });
     }
     return total;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

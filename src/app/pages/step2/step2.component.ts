@@ -5,7 +5,7 @@ import { SelectCardComponent } from '../../components/select-card/select-card.co
 import { planEnumType } from 'src/app/type/planType';
 import { DataService } from 'src/app/service/data.service';
 import { Item } from 'src/app/model/Item';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { OrderService } from 'src/app/service/order.service';
 import { Plan } from 'src/app/model/info';
 
@@ -74,8 +74,7 @@ export class Step2Component implements OnInit, OnDestroy {
     price: 0,
   };
   planItem: Item[] | undefined;
-  planSubscription: Subscription | undefined;
-  orderSubscription: Subscription | undefined;
+  private destroy$ = new Subject<void>();
   constructor(
     private data: DataService,
     private orderService: OrderService,
@@ -87,19 +86,20 @@ export class Step2Component implements OnInit, OnDestroy {
   }
 
   getPlan() {
-    this.planSubscription = this.data.getPlan().subscribe((res) => {
-      this.planItem = res;
-    });
+    this.data
+      .getPlan()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.planItem = res;
+      });
   }
 
   getOrder() {
-    this.orderSubscription = this.orderService.orderSubject.subscribe(
-      (order) => {
-        this.selectItemId = order.plan.id;
-        this._plan = order.plan;
-        this.selectedPlan = order.selectedPlan;
-      },
-    );
+    this.orderService.order$.subscribe((order) => {
+      this.selectItemId = order.plan.id;
+      this._plan = order.plan;
+      this.selectedPlan = order.selectedPlan;
+    });
   }
 
   handleSelectPlan() {
@@ -119,7 +119,7 @@ export class Step2Component implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.planSubscription?.unsubscribe();
-    this.orderSubscription?.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

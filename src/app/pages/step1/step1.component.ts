@@ -5,7 +5,7 @@ import { InputComponent } from '../../components/input/input.component';
 import { ButtonPanelComponent } from '../../components/button-panel/button-panel.component';
 import { CardComponent } from '../../components/card/card.component';
 import { Info } from 'src/app/model/info';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-step1',
@@ -46,16 +46,14 @@ export class Step1Component implements OnInit, OnDestroy {
     email: '',
     phone: '',
   };
-  orderSubscription: Subscription | undefined;
+  private destroy$ = new Subject<void>();
 
   constructor(public orderService: OrderService) {}
 
   ngOnInit(): void {
-    this.orderSubscription = this.orderService.orderSubject.subscribe(
-      (order) => {
-        this._info = order.info;
-      },
-    );
+    this.orderService.order$.subscribe((order) => {
+      this._info = order.info;
+    });
   }
 
   handleInfo(e: Event, infoType: string) {
@@ -63,6 +61,7 @@ export class Step1Component implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.orderSubscription?.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
