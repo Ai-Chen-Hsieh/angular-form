@@ -42,11 +42,9 @@ export class ButtonPanelComponent implements OnInit, OnDestroy {
   stepSubscription: Subscription | undefined;
 
   ngOnInit(): void {
-    this.stepSubscription = this.shareService.currentStepSubject.subscribe(
-      (step) => {
-        this.currentStep = step;
-      },
-    );
+    this.stepSubscription = this.shareService.currentStep$.subscribe((step) => {
+      this.currentStep = step;
+    });
   }
 
   handlePrevStep() {
@@ -58,8 +56,6 @@ export class ButtonPanelComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.stepSubscription) {
-      this.stepSubscription.unsubscribe();
-    }
+    this.stepSubscription?.unsubscribe();
   }
 }

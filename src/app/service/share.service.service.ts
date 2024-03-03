@@ -1,30 +1,24 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShareService {
-  constructor(private http: HttpClient) {}
-  currentStep = 0;
-  currentStepSubject = new BehaviorSubject<number>(0);
+  constructor() {}
+  private currentStepSubject$ = new BehaviorSubject<number>(0);
+  public currentStep$ = this.currentStepSubject$.asObservable();
+  get currentStep(): number {
+    return this.currentStepSubject$.value;
+  }
 
   previousStep() {
-    if (this.currentStep == 0) {
-      return;
-    } else {
-      this.currentStep--;
-      this.currentStepSubject.next(this.currentStep);
+    if (this.currentStep > 0) {
+      this.currentStepSubject$.next(this.currentStep - 1);
     }
   }
 
   nextStep() {
-    if (this.currentStep == 3) {
-      return;
-    } else {
-      this.currentStep++;
-      this.currentStepSubject.next(this.currentStep);
-    }
+    this.currentStepSubject$.next(this.currentStep + 1);
   }
 }

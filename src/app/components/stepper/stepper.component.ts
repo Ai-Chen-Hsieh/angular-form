@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ShareService } from 'src/app/service/share.service.service';
 
@@ -39,14 +40,23 @@ import { ShareService } from 'src/app/service/share.service.service';
     `,
   ],
 })
-export class StepperComponent implements OnInit {
+export class StepperComponent implements OnInit, OnDestroy {
   constructor(private shareService: ShareService) {}
   stepTitle = ['YOUR INFO', 'SELECT PLAN', 'ADD-ONS', 'SUMMARY'];
   currentStep: number | undefined;
 
+  private destroy$ = new Subject<void>();
+
   ngOnInit(): void {
-    this.shareService.currentStepSubject.subscribe((step) => {
-      this.currentStep = step;
-    });
+    this.shareService.currentStep$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((step) => {
+        this.currentStep = step;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
