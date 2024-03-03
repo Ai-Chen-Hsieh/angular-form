@@ -51,24 +51,13 @@ export class OrderService {
       const findPlan = getAllPlan.find(
         (item: Plan) => item.id === this.order.plan.id,
       );
-
       this.order.plan = {
         ...this.order.plan,
         price:
           this.order.selectedPlan === planEnumType.MONTH
-            ? findPlan?.monthPrice
-            : findPlan?.yearPrice,
+            ? findPlan.monthPrice
+            : findPlan.yearPrice,
       };
-      this.order.ons = this.order.ons.map((item) => {
-        return {
-          ...item,
-          plan:
-            this.order.selectedPlan === planEnumType.MONTH
-              ? planEnumType.MONTH
-              : planEnumType.YEAR,
-        };
-      });
-      console.log('order', this.order);
       this.orderSubject.next({ ...this.order });
     } catch (error) {
       console.log('error', error);
@@ -76,7 +65,6 @@ export class OrderService {
   }
 
   handleOnsSelect(ons: Ons) {
-    console.log('nos', ons);
     const hadSelectIndex = this.order.ons.findIndex(
       (item) => item.id === ons.id,
     );

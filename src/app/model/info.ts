@@ -14,8 +14,8 @@ export interface Plan {
 export interface Ons {
   id: number;
   name: string;
-  price: number;
-  plan: number;
+  monthPrice: number;
+  yearPrice: number;
 }
 
 export interface Order {

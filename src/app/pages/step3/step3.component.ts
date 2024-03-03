@@ -2,7 +2,6 @@ import { CheckCardComponent } from './../../components/check-card/check-card.com
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from 'src/app/components/card/card.component';
-import { planEnumType } from 'src/app/type/planType';
 import { DataService } from 'src/app/service/data.service';
 import { Subject, Subscription, concatMap, map, takeUntil } from 'rxjs';
 import { OnsItem } from 'src/app/model/onsItem';
@@ -70,11 +69,8 @@ export class Step3Component implements OnInit, OnDestroy {
     const ons = {
       id: onsItem.id,
       name: onsItem.title,
-      plan: this.selectedPlan,
-      price:
-        this.selectedPlan == planEnumType.MONTH
-          ? onsItem.monthPrice
-          : onsItem.yearPrice,
+      monthPrice: onsItem.monthPrice,
+      yearPrice: onsItem.yearPrice,
     };
     this.orderService.handleOnsSelect(ons);
   }

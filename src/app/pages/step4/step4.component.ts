@@ -34,14 +34,19 @@ import { Ons, Plan } from 'src/app/model/info';
             >
               <span class=" text-secondary">{{ item.name }}</span>
               <span class=" text-primary"
-                >+$ {{ item.price }} / {{ item.plan == 0 ? 'mo' : 'yr' }}</span
+                >+$ {{ selectType == 0 ? item.monthPrice : item.yearPrice }} /
+                {{ selectType == 0 ? 'mo' : 'yr' }}</span
               >
             </div>
           </div>
         </div>
         <div class=" mt-4 flex justify-between px-4 py-6 pb-3 font-extrabold">
-          <span class="text-secondary">Total (per month)</span>
-          <span class=" text-primary-blue">$120/yr</span>
+          <span class="text-secondary"
+            >Total (per {{ selectType == 0 ? 'month' : 'year' }})</span
+          >
+          <span class=" text-primary-blue"
+            >$ {{ totalPrice }}/ {{ selectType == 0 ? 'mo' : 'yr' }}</span
+          >
         </div>
       </div>
     </app-card>
@@ -61,9 +66,26 @@ export class Step4Component implements OnInit {
     price: 0,
   };
   selectType = this.orderService.order.selectedPlan;
+  totalPrice = 0;
 
   ngOnInit(): void {
     this.selectedPlan = this.orderService.order.plan;
     this.ons = this.orderService.order.ons;
+    this.totalPrice = this.calculateTotal(this.totalPrice);
+  }
+
+  calculateTotal(initialValue: number) {
+    let total = initialValue;
+    total += this.orderService.order.plan.price;
+    if (this.selectType == 0) {
+      this.orderService.order.ons.forEach((item) => {
+        total += item.monthPrice;
+      });
+    } else {
+      this.orderService.order.ons.forEach((item) => {
+        total += item.yearPrice;
+      });
+    }
+    return total;
   }
 }
