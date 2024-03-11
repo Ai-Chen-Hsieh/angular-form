@@ -11,6 +11,7 @@ import { Step1Component } from '../step1/step1.component';
 import { Step2Component } from '../step2/step2.component';
 import { Step3Component } from '../step3/step3.component';
 import { Step4Component } from '../step4/step4.component';
+import { FinalComponent } from '../final/final.component';
 import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-home',
@@ -34,6 +35,7 @@ import { Subscription } from 'rxjs';
             <app-step2 *ngSwitchCase="1"></app-step2>
             <app-step3 *ngSwitchCase="2"></app-step3>
             <app-step4 *ngSwitchCase="3"></app-step4>
+            <app-final *ngSwitchCase="4"></app-final>
           </div>
           <div class=" mx-4 mt-auto hidden h-20 bg-white lg:block">
             <app-button-panel
@@ -44,6 +46,7 @@ import { Subscription } from 'rxjs';
         </div>
         <div class=" h-20 bg-white py-4 lg:hidden">
           <app-button-panel
+            *ngIf="currentStep !== 4"
             (prevStep)="previousStep()"
             (nextStep)="nextStep()"
           ></app-button-panel>
@@ -64,6 +67,7 @@ import { Subscription } from 'rxjs';
     Step2Component,
     Step3Component,
     Step4Component,
+    FinalComponent,
   ],
 })
 export class HomeComponent implements OnInit, OnDestroy {

@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from '../../components/card/card.component';
 import { OrderService } from 'src/app/service/order.service';
-import { Ons, Order, Plan } from 'src/app/model/info';
+import { Ons, Plan } from 'src/app/model/info';
 
 @Component({
   selector: 'app-step4',
@@ -56,10 +56,7 @@ import { Ons, Order, Plan } from 'src/app/model/info';
   imports: [CommonModule, CardComponent],
 })
 export class Step4Component implements OnInit, OnDestroy {
-  constructor(
-    private shareService: ShareService,
-    private orderService: OrderService,
-  ) {}
+  constructor(private orderService: OrderService) {}
   ons: Ons[] = [];
   selectedPlan: Plan = {
     id: 0,

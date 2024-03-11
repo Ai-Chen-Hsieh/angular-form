@@ -19,6 +19,8 @@ export class ShareService {
   }
 
   nextStep() {
-    this.currentStepSubject$.next(this.currentStep + 1);
+    if (this.currentStep < 4) {
+      this.currentStepSubject$.next(this.currentStep + 1);
+    }
   }
 }
