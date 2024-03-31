@@ -4,8 +4,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## View
 
-![Desktop](https://github.com/Ai-Chen-Hsieh/angular-form/blob/src/assets/images/angular-form-desktop.png)
-![Mobile](https://github.com/Ai-Chen-Hsieh/angular-form/blob/src/assets/images/angular-form-mobile.png)
+![Desktop](https://github.com/Ai-Chen-Hsieh/angular-form/blob/main/src/assets/images/angular-form-desktop.png)
+![Mobile](https://github.com/Ai-Chen-Hsieh/angular-form/blob/main/src/assets/images/angular-form-mobile.png)
 
 ## Website
 
