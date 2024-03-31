@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs';
   template: `
     <div class="relative flex h-full items-center">
       <div
-        class=" m-auto flex h-[90%] w-4/5 max-w-[1000px] flex-col bg-[#ebf2fc] lg:h-[80%] lg:flex-row lg:justify-normal lg:bg-white"
+        class=" m-auto flex h-full w-full max-w-[1000px] flex-col bg-[#ebf2fc] sm:h-[90%] sm:w-4/5 lg:h-[80%] lg:flex-row lg:justify-normal lg:bg-white"
       >
         <app-nav
           class="h-[200px] w-full lg:my-auto lg:ml-6 lg:h-[95%] lg:max-w-[300px]"

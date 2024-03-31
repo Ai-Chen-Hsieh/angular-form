@@ -12,7 +12,7 @@
 
 @layer components {
   .nav {
-    @apply flex h-full w-full justify-center rounded-tl-lg rounded-tr-lg bg-mobile-sidebar-bg  bg-cover bg-center bg-no-repeat lg:flex lg:items-center lg:rounded-lg lg:bg-desktop-sidebar-bg;
+    @apply flex h-full w-full justify-center bg-mobile-sidebar-bg bg-cover bg-center  bg-no-repeat sm:rounded-tl-lg sm:rounded-tr-lg lg:flex lg:items-center lg:rounded-lg lg:bg-desktop-sidebar-bg;
   }
 
   .step {
