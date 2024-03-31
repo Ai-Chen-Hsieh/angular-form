@@ -21,7 +21,7 @@ import { CardComponent } from 'src/app/components/card/card.component';
         <p class=" py-4 font-bold text-card-description">
           Thanks for confirming your subscription! We hope you have fun using
           our platform. If you ever need support, please feel free to email us
-          at [email]
+          at service@service.com
         </p>
       </div>
     </app-card>
