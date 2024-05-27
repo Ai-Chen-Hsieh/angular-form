@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs';
   template: `
     <div class="relative flex h-full items-center">
       <div
-        class=" m-auto flex h-full w-full max-w-[1000px] flex-col bg-[#ebf2fc] sm:h-[90%] sm:w-4/5 lg:h-[80%] lg:flex-row lg:justify-normal lg:bg-white"
+        class=" m-auto flex h-full w-full max-w-[1000px] flex-col bg-[#ebf2fc] sm:w-4/5 lg:h-[80%] lg:flex-row lg:justify-normal lg:bg-white"
       >
         <app-nav
           class="h-[200px] w-full lg:my-auto lg:ml-6 lg:h-[95%] lg:max-w-[300px]"
@@ -37,19 +37,9 @@ import { Subscription } from 'rxjs';
             <app-step4 *ngSwitchCase="3"></app-step4>
             <app-final *ngSwitchCase="4"></app-final>
           </div>
-          <div class=" mx-4 mt-auto hidden h-20 bg-white lg:block">
-            <app-button-panel
-              (prevStep)="previousStep()"
-              (nextStep)="nextStep()"
-            ></app-button-panel>
+          <div class=" mx-4 mt-auto h-20">
+            <app-button-panel *ngIf="currentStep !== 4"></app-button-panel>
           </div>
-        </div>
-        <div class=" h-20 bg-white py-4 lg:hidden">
-          <app-button-panel
-            *ngIf="currentStep !== 4"
-            (prevStep)="previousStep()"
-            (nextStep)="nextStep()"
-          ></app-button-panel>
         </div>
       </div>
     </div>
@@ -79,13 +69,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.shareService.currentStep$.subscribe((step) => {
       this.currentStep = step;
     });
-  }
-
-  previousStep() {
-    this.shareService.previousStep();
-  }
-  nextStep() {
-    this.shareService.nextStep();
   }
 
   ngOnDestroy(): void {

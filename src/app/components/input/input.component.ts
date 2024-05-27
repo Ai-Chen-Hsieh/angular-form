@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
       >
       <input
         type="text"
-        class=" mt-2 w-full rounded-md border-[1px] border-solid border-[#CBD2D9] px-4 py-2 font-bold outline-1 outline-slate-600 placeholder:font-extrabold placeholder:text-[#CBD2D9]"
+        class=" mt-2 w-full rounded-md border-[1px] border-solid border-[#CBD2D9] px-4 py-2 font-bold outline-1 outline-slate-600 placeholder:font-extrabold placeholder:text-[#CBD2D9] md:mt-0"
         [placeholder]="placeholder"
         [(ngModel)]="value"
         (input)="handleInput($event)"

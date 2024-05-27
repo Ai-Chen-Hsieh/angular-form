@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ShareService } from 'src/app/service/share.service.service';
 import { Subscription } from 'rxjs';
@@ -35,9 +29,6 @@ import { Subscription } from 'rxjs';
 export class ButtonPanelComponent implements OnInit, OnDestroy {
   constructor(private shareService: ShareService) {}
 
-  @Output() nextStep = new EventEmitter();
-  @Output() prevStep = new EventEmitter();
-
   currentStep: any;
   stepSubscription: Subscription | undefined;
 
@@ -48,11 +39,11 @@ export class ButtonPanelComponent implements OnInit, OnDestroy {
   }
 
   handlePrevStep() {
-    this.prevStep.emit();
+    this.shareService.previousStep();
   }
 
   handleNextStep() {
-    this.nextStep.emit();
+    this.shareService.nextStep();
   }
 
   ngOnDestroy(): void {
